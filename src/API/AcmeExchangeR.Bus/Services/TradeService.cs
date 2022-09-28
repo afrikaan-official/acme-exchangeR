@@ -2,16 +2,19 @@ using AcmeExchangeR.Bus.Services.Abstraction;
 using AcmeExchangeR.Data;
 using AcmeExchangeR.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace AcmeExchangeR.Bus.Services;
 
 public class TradeService : ITradeService
 {
     private readonly ExchangeRateDbContext _dbContext;
+    private readonly ILogger<TradeService> _logger;
 
-    public TradeService(ExchangeRateDbContext dbContext)
+    public TradeService(ExchangeRateDbContext dbContext, ILogger<TradeService> logger)
     {
         _dbContext = dbContext;
+        _logger = logger;
     }
     public async Task<(decimal, string)> TradeAsync(string from,string to,decimal amount,string clientId,CancellationToken cancellationToken)
     {
@@ -31,7 +34,8 @@ public class TradeService : ITradeService
             {
                 if (clientLimit.Count >= 10)
                 {
-                    return (0, "You cannot trade more then 10 times per hour.");
+                    _logger.LogError($"client: {clientId} is sending more then 10 request!");
+                    return (0, "You cannot send trade request more then 10 times per hour.");
                 }
                 //if client has limit increment count
                 clientLimit.Count++;
@@ -39,6 +43,8 @@ public class TradeService : ITradeService
             }
             else if (diff.Minutes >= 60) //reset client limit
             {
+                _logger.LogInformation($"Reset limit of client: {clientId}");
+
                 clientLimit.Count = 0;
                 _dbContext.Entry(clientLimit).State = EntityState.Modified;
             }
@@ -51,12 +57,16 @@ public class TradeService : ITradeService
 
         if (dbEntry == null)
         {
+            _logger.LogError($"Requested exchange {from} is not in database.");
+
             return (0, $"Requested exchange {from} is not in database.");
         }
 
         // check if to exchange is inside list
         if (!dbEntry.Payload.Results.TryGetProperty(to, out var toCurrency))
         {
+            _logger.LogError($"Requested exchange {to} is not in database.");
+
             return (0, $"Requested exchange {to} is not in database.");
         }
 
@@ -76,6 +86,8 @@ public class TradeService : ITradeService
         //if clientLimit is null that means client is trading for the first time 
         if (clientLimit == null)
         {
+            _logger.LogInformation($"New client is making trade request for the first time. Client: {clientId}");
+
             await _dbContext.ClientLimits.AddAsync(new ClientLimit
             {
                 Count = 1,

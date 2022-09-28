@@ -10,25 +10,31 @@ public class ExchangeRatesController : ControllerBase
 {
     private readonly IRateService _exchangeService;
     private readonly IMemoryCache _memoryCache;
-    
-    public ExchangeRatesController(IRateService exchangeService, IMemoryCache memoryCache)
+    private readonly ILogger<ExchangeRatesController> _logger;
+
+    public ExchangeRatesController(IRateService exchangeService, IMemoryCache memoryCache,ILogger<ExchangeRatesController> logger)
     {
         _exchangeService = exchangeService;
         _memoryCache = memoryCache;
+        _logger = logger;
     }
     
     public async Task<IActionResult> Get([FromQuery] string currency, CancellationToken cancellationToken)
     {
+        _logger.LogInformation($"Get rates called with currency:{currency}");
         const string key = "acmeExchanger";
         
         if (_memoryCache.TryGetValue(key, out ExchangeRate rateInMemory))
         {
+            _logger.LogInformation("Cache hits");
             return Ok(rateInMemory);
         }
         var rate = await _exchangeService.GetByCurrencyAsync(currency, cancellationToken);
 
         if (rate == null)
         {
+            _logger.LogWarning($"{currency} is not in the database!.Maybe update appsetting.json");
+
             return NotFound("Requested exchange rate is not in database!");
         }
         

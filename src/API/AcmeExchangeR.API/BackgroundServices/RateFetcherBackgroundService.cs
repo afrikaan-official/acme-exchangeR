@@ -3,7 +3,7 @@ using AcmeExchangeR.Utils.FastForexClient;
 
 namespace AcmeExchangeR.API.BackgroundServices;
 
-// Will run in the background (every 15 minutes) to fetch exchange from resources (fastForex) and store it to database
+// Will run in the background (every 7 seconds) to fetch exchange from resources (fastForex) and store it to database
 public class RateFetcherBackgroundService : BackgroundService
 {
     private readonly TimeSpan _period = TimeSpan.FromDays(10);
@@ -32,9 +32,11 @@ public class RateFetcherBackgroundService : BackgroundService
                         var fastForexClient = scope.ServiceProvider.GetRequiredService<IFastForexClient>();
                         var exchangeService = scope.ServiceProvider.GetRequiredService<IRateService>();
                         
+                        //get all active exchanges from configuration
                         var exchanges = _configuration.GetSection("Exchanges").GetChildren();
-                        
+                        //create tasks
                         var fetchTasks = exchanges.Select(x => fastForexClient.FetchExchangeRateAsync(x.Value, stoppingToken)).ToArray();
+                        //send multiple requests to fastForex in paralel
                         var fetchResults = await Task.WhenAll(fetchTasks);
 
                         foreach (var fetchResult in fetchResults)
@@ -49,6 +51,5 @@ public class RateFetcherBackgroundService : BackgroundService
                 }
             }
         }
-
     }
 }

@@ -30,12 +30,10 @@ namespace AcmeExchangeR.Utils.FastForexClient
 
             var response =
                 await _httpClient.GetAsync($"/fetch-all?from={currency}&api_key={apiKey}", cancellationToken);
-            
+
             var jsonResponse = await response.Content.ReadAsStringAsync(cancellationToken);
-
-            var s =  JsonSerializer.Deserialize<FastForexResponse>(jsonResponse);
-
-            return s;
+            
+            return JsonSerializer.Deserialize<FastForexResponse>(jsonResponse);
         }
     }
 }
