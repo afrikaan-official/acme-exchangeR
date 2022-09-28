@@ -7,15 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\Utils\AcmeExchangeR.Utils\AcmeExchangeR.Utils.csproj" />
+      <ProjectReference Include="..\AcmeExchangeR.Bus\AcmeExchangeR.Bus.csproj" />
+      <ProjectReference Include="..\AcmeExchangeR.Data\AcmeExchangeR.Data.csproj" />
     </ItemGroup>
 
 </Project>
