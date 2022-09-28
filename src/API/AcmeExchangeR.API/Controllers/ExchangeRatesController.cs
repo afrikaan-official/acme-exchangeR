@@ -11,14 +11,21 @@ public class ExchangeRatesController : ControllerBase
     private readonly IRateService _exchangeService;
     private readonly IMemoryCache _memoryCache;
     private readonly ILogger<ExchangeRatesController> _logger;
+    private readonly IConfiguration _configuration;
 
-    public ExchangeRatesController(IRateService exchangeService, IMemoryCache memoryCache,ILogger<ExchangeRatesController> logger)
+    public ExchangeRatesController(IRateService exchangeService,
+        IMemoryCache memoryCache,
+        ILogger<ExchangeRatesController> logger, 
+        IConfiguration configuration)
     {
         _exchangeService = exchangeService;
         _memoryCache = memoryCache;
         _logger = logger;
+        _configuration = configuration;
     }
     
+    //This endpoint uses in memory cache
+    //Cachetimeout can be increased or decreased from appsettings.json
     public async Task<IActionResult> Get([FromQuery] string currency, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Get rates called with currency:{currency}");
@@ -40,7 +47,7 @@ public class ExchangeRatesController : ControllerBase
         
         _memoryCache.Set(key, rate, new MemoryCacheEntryOptions
         {
-            AbsoluteExpiration = DateTime.Now.AddSeconds(20),
+            AbsoluteExpiration = DateTime.Now.AddSeconds(_configuration.GetValue<int>("CacheTimeOut")),
             Priority = CacheItemPriority.Normal
         });
 

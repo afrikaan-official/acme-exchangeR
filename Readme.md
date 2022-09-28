@@ -7,6 +7,35 @@ AcmeExchangeR is a simple web api for exchange rates
 - Api is written with `dotnet core 6`
 - My database choice is `postgresql` (In order to make it much funnier i'm using `postgres` as document db for one table `ExchangeRates`)
 
+### FolderStructure
+```
+.
+├── AcmeExcangeR
+│   ├── src/    
+│   │   ├── API/
+│   │   │   ├── AcmeExcangeR.API/
+│   │   │   │   ├── appsettings.json
+│   │   │   │   ├── Controllers/
+│   │   │   │   ├── Middlewares/
+│   │   │   │   ├── Validators/
+│   │   │   │   ├── ...
+│   │   │   ├── AcmeExcangeR.Bus/
+│   │   │   │   ├── Services/
+│   │   │   ├── AcmeExcangeR.Data/
+│   │   │   │   ├── Entities/
+│   │   │   │   ├── ExchangeRateDbContext.cs
+│   │   ├── Utils/
+│   │   │   ├── AcmeExcangeR.Utils/
+│   │   │   │   ├── FastForexClient/
+│   │   │   │   ├── Models/
+│   │   ├── Misc/
+│   │   │   ├── Scripts/
+│   │   │   │   ├── tables.sql
+│   │   │   │   ├── Dockerfile
+│   │   Readme.md
+│   └── docker-compose.yaml
+```
+
 ## How to run this project
 There is a docker-compose file in the root of the project. You can simply run `docker-compose up -d`
 it will create a `postgres` and `api`. `postgres` will run at port `5432` and `api` will run at port `5000`.
