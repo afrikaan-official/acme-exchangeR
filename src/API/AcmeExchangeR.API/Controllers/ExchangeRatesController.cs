@@ -30,12 +30,13 @@ public class ExchangeRatesController : ControllerBase
     {
         _logger.LogInformation($"Get rates called with currency:{currency}");
         const string key = "acmeExchanger";
-        
+
         if (_memoryCache.TryGetValue(key, out ExchangeRate rateInMemory))
         {
-            _logger.LogInformation("Cache hits");
+            _logger.LogInformation($"Cache hits for currency:{currency}");
             return Ok(rateInMemory);
         }
+
         var rate = await _exchangeService.GetByCurrencyAsync(currency, cancellationToken);
 
         if (rate == null)
@@ -44,7 +45,7 @@ public class ExchangeRatesController : ControllerBase
 
             return NotFound("Requested exchange rate is not in database!");
         }
-        
+
         _memoryCache.Set(key, rate, new MemoryCacheEntryOptions
         {
             AbsoluteExpiration = DateTime.Now.AddSeconds(_configuration.GetValue<int>("CacheTimeOut")),

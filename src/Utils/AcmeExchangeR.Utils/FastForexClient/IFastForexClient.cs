@@ -1,4 +1,3 @@
-using AcmeExchangeR.Utils.Models;
 using AcmeExchangeR.Utils.Models.Responses;
 
 namespace AcmeExchangeR.Utils.FastForexClient

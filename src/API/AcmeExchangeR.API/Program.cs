@@ -1,6 +1,4 @@
-using System.Net;
 using AcmeExchangeR.API.BackgroundServices;
-using AcmeExchangeR.API.Middlewares;
 using AcmeExchangeR.API.Validators;
 using AcmeExchangeR.Bus.Services.Abstraction;
 using AcmeExchangeR.Bus.Services;
@@ -8,7 +6,6 @@ using AcmeExchangeR.Data;
 using AcmeExchangeR.Utils.FastForexClient;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using ExceptionHandlerMiddleware = AcmeExchangeR.API.Middlewares.ExceptionHandlerMiddleware;
 

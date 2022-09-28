@@ -10,3 +10,15 @@ services:
       POSTGRES_PASSWORD: 12345
       POSTGRES_USER: Acme
       POSTGRES_DB: AcmeExchanger
+  api:
+    build:
+      dockerfile: ../Misc/Dockerfile
+      context: src/.
+      args:
+        PROJECT_NAME: AcmeExchangeR.API
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    ports:
+      - "5010:5010"
+    depends_on:
+      - db
