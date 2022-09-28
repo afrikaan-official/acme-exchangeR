@@ -11,4 +11,5 @@ public class ExchangeRateDbContext : DbContext
     }
     public DbSet<ExchangeRate> ExchangeRates { get; set; }
     public DbSet<TradeHistory> TradeHistories { get; set; }
+    public DbSet<ClientLimit> ClientLimits { get; set; }
 }

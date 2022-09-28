@@ -1,6 +1,6 @@
-using System.Reflection;
 using AcmeExchangeR.API.BackgroundServices;
 using AcmeExchangeR.API.Validators;
+using AcmeExchangeR.Bus.Services.Abstraction;
 using AcmeExchangeR.Bus.Services;
 using AcmeExchangeR.Data;
 using AcmeExchangeR.Utils.FastForexClient;
@@ -18,7 +18,7 @@ builder.Services.AddControllers(options =>
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.WebHost.UseUrls("http://*:5007");
+builder.WebHost.UseUrls("http://*:5010");
 
 builder.Services.AddHttpClient("fastForex", o =>
 {
@@ -26,13 +26,15 @@ builder.Services.AddHttpClient("fastForex", o =>
     o.BaseAddress = new Uri(builder.Configuration.GetValue<string>("FastForexAPI:Url"));
 });
 builder.Services.AddScoped<IFastForexClient, FastForexClient>();
+builder.Services.AddScoped<IRateService, RateService>();
+builder.Services.AddScoped<ITradeService, TradeService>();
 builder.Services.AddHostedService<RateFetcherBackgroundService>();
 builder.Services.AddDbContext<ExchangeRateDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
 });
-builder.Services.AddScoped<IRateService, RateService>();
 builder.Services.AddValidatorsFromAssemblyContaining<TradeValidator>();
+builder.Services.AddMemoryCache();
 builder.Services.AddFluentValidationAutoValidation();
 
 var app = builder.Build();

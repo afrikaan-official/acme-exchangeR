@@ -1,4 +1,4 @@
-using AcmeExchangeR.Bus.Services;
+using AcmeExchangeR.Bus.Services.Abstraction;
 using AcmeExchangeR.Utils.FastForexClient;
 
 namespace AcmeExchangeR.API.BackgroundServices;

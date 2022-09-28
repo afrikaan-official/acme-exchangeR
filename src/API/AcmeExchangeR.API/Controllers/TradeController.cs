@@ -1,4 +1,5 @@
 using AcmeExchangeR.Bus.Services;
+using AcmeExchangeR.Bus.Services.Abstraction;
 using AcmeExchangeR.Utils.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,11 +8,11 @@ namespace AcmeExchangeR.API.Controllers;
 [Route("trade")]
 public class TradeController : ControllerBase
 {
-    private readonly IRateService _exchangeService;
+    private readonly ITradeService _tradeService;
 
-    public TradeController(IRateService exchangeService)
+    public TradeController(ITradeService tradeService)
     {
-        _exchangeService = exchangeService;
+        _tradeService = tradeService;
     }
 
     [HttpPost]
@@ -25,7 +26,7 @@ public class TradeController : ControllerBase
                 return BadRequest(new { error = $"X-Client-Id header is missing" });
             }
 
-            var (result, error) = await _exchangeService.TradeAsync(request.From, request.To, request.Amount, clientId,
+            var (result, error) = await _tradeService.TradeAsync(request.From, request.To, request.Amount, clientId,
                 cancellationToken);
             
             if (!string.IsNullOrEmpty(error))

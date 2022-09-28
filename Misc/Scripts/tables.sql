@@ -10,4 +10,12 @@ CREATE TABLE "TradeHistories"(
     "Amount" decimal,
     "ClientId" varchar(50),
     "CreatedDate" timestamp not null
-)
+);
+
+create table "ClientLimits"
+(
+    "Id" serial primary key ,
+    "ClientId" varchar(50),
+    "LastTradeDate" timestamp,
+    "Count" int
+);
