@@ -38,7 +38,7 @@ AcmeExchangeR is a simple web api for exchange rates
 
 ## How to run this project
 There is a docker-compose file in the root of the project. You can simply run `docker-compose up -d`
-it will create a `postgres` and `api`. `postgres` will run at port `5432` and `api` will run at port `5000`.
+it will create a `postgres` and `api`. `postgres` will run at port `5432` and `api` will run at port `5010`.
 After `docker-compose` finishes you must see sth. like this:
 
 ```
@@ -46,7 +46,7 @@ Creating acmeexchanger_db_1 ... done
 Creating acmeexchanger_api_1 ... done
 ```
 
-And you can go `http://localhost:5000/swagger/index.html` to interact with api. Or you can use `postman`/`curl`
+And you can go `http://localhost:5010/swagger/index.html` to interact with api. Or you can use `postman`/`curl`
 
 
 ## Assumptions

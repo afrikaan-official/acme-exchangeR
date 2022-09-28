@@ -26,7 +26,8 @@ public class ExchangeRatesController : ControllerBase
     
     //This endpoint uses in memory cache
     //Cachetimeout can be increased or decreased from appsettings.json
-    public async Task<IActionResult> Get([FromQuery] string currency, CancellationToken cancellationToken)
+    [HttpGet]
+    public async Task<IActionResult> GetExchangeRate([FromQuery] string currency, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Get rates called with currency:{currency}");
         const string key = "acmeExchanger";
