@@ -58,7 +58,7 @@ public class ExchangeRatesControllerTest
             _mockConfiguration.Object);
 
         //Act
-        var response = await _controller.Get("USD", CancellationToken.None);
+        var response = await _controller.GetExchangeRate("USD", CancellationToken.None);
         var okResult = response as OkObjectResult;
 
         //Assert
